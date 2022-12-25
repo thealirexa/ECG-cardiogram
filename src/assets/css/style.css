@@ -1,0 +1,9 @@
+.fill {
+  height: 96vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  background-color: #090909 !important;
+}
