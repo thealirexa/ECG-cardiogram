@@ -1,40 +1,29 @@
 import "./assets/css/bootstrap.min.css";
 import "./assets/css/style.css";
 
-import {
-  FaAccusoft,
-  FaAddressBook,
-  FaAdversal,
-  FaAlgolia,
-  FaThinkPeaks,
-} from "react-icons/fa";
+import { FaThinkPeaks } from "react-icons/fa";
 
 import React, { useEffect, useState } from "react";
 import ECGChart from "./components/Chart";
 
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:8231");
 export const App = () => {
   const [data1, setData1] = useState([]);
-  const statuses = [
-    <FaAccusoft />,
-    <FaAddressBook />,
-    <FaAdversal />,
-    <FaAlgolia />,
-  ];
+  let [counter, setCounter] = useState(0);
+  useEffect(() => {}, []);
   useEffect(() => {
-    const interval1 = setInterval(() => {
-      setData1([
-        { x: 0, y: Math.random() * 100 },
-        { x: 1, y: Math.random() * 100 },
-        { x: 2, y: Math.random() * 100 },
-        { x: 3, y: Math.random() * 100 },
-        { x: 4, y: Math.random() * 100 },
-      ]);
-    }, 3000);
-
-    return () => {
-      clearInterval(interval1);
-    };
-  }, []);
+    socket.on("receive_data", (sd) => {
+      let arr = [];
+      console.log(sd.data.ecg);
+      sd.data.ecg.map((d) => {
+        arr.push({ x: counter, y: d });
+        setCounter(counter++);
+      });
+      setData1(arr);
+    });
+  }, [socket]);
   return (
     <div className="row p-0 m-0">
       <div className="fill col-8 mt-3">

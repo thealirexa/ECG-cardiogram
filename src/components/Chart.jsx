@@ -26,7 +26,7 @@ const ECGChart = (props) => {
     if (!components) return;
     const { series } = components;
     console.log("set chart data", data);
-    series.clear().add(data);
+    series.add(data);
   }, [data, chartRef]);
 
   return <div id={id} className="h-100"></div>;
